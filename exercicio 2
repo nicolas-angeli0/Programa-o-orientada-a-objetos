@@ -1,0 +1,53 @@
+# produto filme 
+
+public class Filme{
+    String titulo;
+    int duracao;
+    double nota;
+    boolean assistido;
+
+    public Filme(String titulo,int duracao,double nota,boolean assistido){
+        this.titulo=titulo;
+        this.duracao=duracao;
+        this.nota=nota;
+        this.assistido=assistido;
+    }
+
+    public void exibirFicha(){
+        System.out.println("Título: "+titulo);
+        System.out.println("Duração: "+duracao+" minutos");
+        System.out.println("Nota: "+nota);
+        System.out.println("Assistido: "+assistido);
+    }
+
+    public void marcarAssistido(){
+        assistido=true;
+    }
+
+    public void avaliar(double novaNota){
+        if(novaNota>=0&&novaNota<=10){
+            nota=novaNota;
+        }else{
+            System.out.println("A nota deve estar entre 0 e 10.");
+        }
+    }
+}
+
+
+
+# principal 
+
+public class Principal{
+    public static void main(String[] args){
+        Filme filme1=new Filme("Vingadores",180,8.5,false);
+        Filme filme2=new Filme("Batman",176,9.0,false);
+        Filme filme3=new Filme("Interestelar",169,8.8,false);
+
+        filme1.marcarAssistido();
+        filme2.avaliar(9.5);
+
+        filme1.exibirFicha();
+        filme2.exibirFicha();
+        filme3.exibirFicha();
+    }
+}
