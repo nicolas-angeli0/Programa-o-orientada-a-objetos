@@ -1,3 +1,4 @@
+# cliente
 package aula03.ex1;
 
 public class cliente {
@@ -7,5 +8,76 @@ public class cliente {
     public cliente(String nome, String email){
         this.nome=nome;
         this.email=email;
+    }
+}
+
+
+
+# pedido
+
+package aula03.ex1;
+
+public class pedido {
+    cliente cliente;
+    produto produto;
+    int quantidade;
+    double desconto;
+
+    public pedido(cliente cliente, produto produto, int quantidade){
+        this.cliente=cliente;
+        this.produto=produto;
+        this.quantidade=quantidade;
+    }
+
+    public String resumo(){
+        double valorTotal=produto.preco*quantidade;
+        valorTotal=valorTotal-(valorTotal*desconto/100);
+
+        return "Cliente: " + cliente.nome
+            + " | Produto: " + produto.nome
+            + " | Valor total: R$ " + valorTotal;
+    }
+
+    public void aplicarDesconto(double percentual){
+        if(percentual>=0 && percentual<=100){
+            this.desconto=percentual;
+        }else{
+            System.out.println("O percentual deve estar entre 0 e 100.");
+        }
+    }
+}
+
+
+# produto
+package aula03.ex1;
+
+public class produto {
+    String nome;
+    double preco;
+
+    public produto(String nome, double preco){
+        this.nome=nome;
+        this.preco=preco;
+    }
+}
+
+# principal 
+package aula03.ex1;
+
+public class principal {
+    public static void main(String[] args){
+
+        cliente cliente1=new cliente("Ana", "ana@email.com");
+        produto produto1=new produto("Teclado", 100.00);
+        pedido pedido1=new pedido(cliente1, produto1, 2);
+
+        cliente cliente2=new cliente("Carlos", "carlos@email.com");
+        produto produto2=new produto("Mouse", 50.00);
+        pedido pedido2=new pedido(cliente2, produto2, 3);
+
+        pedido1.aplicarDesconto(10);
+
+        System.out.println(pedido1.resumo());
+        System.out.println(pedido2.resumo());
     }
 }
