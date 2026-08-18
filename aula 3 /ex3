@@ -1,0 +1,81 @@
+#autor
+
+package aula03.ex3;
+
+public class Autor {
+    String nome;
+    String nacionalidade;
+
+    public Autor(String nome, String nacionalidade){
+        this.nome=nome;
+        this.nacionalidade=nacionalidade;
+    }
+}
+
+# livro
+
+package aula03.ex3;
+
+public class Livro {
+    String titulo;
+    Autor autor;
+    int ano;
+    boolean emprestado;
+
+    public Livro(String titulo, Autor autor, int ano, boolean emprestado){
+        this.titulo=titulo;
+        this.autor=autor;
+        this.ano=ano;
+        this.emprestado=emprestado;
+    }
+
+    public void exibirFicha(){
+        System.out.println("Titulo: " + titulo
+            + " | Autor: " + autor.nome
+            + " | Ano: " + ano);
+    }
+
+    public void emprestar(){
+        if(emprestado){
+            System.out.println("O livro " + titulo + " ja esta emprestado.");
+        }else{
+            emprestado=true;
+            System.out.println("O livro " + titulo + " foi emprestado.");
+        }
+    }
+
+    public void devolver(){
+        if(emprestado){
+            emprestado=false;
+            System.out.println("O livro " + titulo + " foi devolvido.");
+        }else{
+            System.out.println("O livro " + titulo + " nao esta emprestado.");
+        }
+    }
+}
+
+
+# principal
+
+package aula03.ex3;
+
+public class Principal {
+    public static void main(String[] args){
+
+        Autor autor1=new Autor("Machado de Assis", "Brasileiro");
+        Autor autor2=new Autor("George Orwell", "Britanico");
+
+        Livro livro1=new Livro("Dom Casmurro", autor1, 1899, false);
+        Livro livro2=new Livro("Memorias Postumas de Bras Cubas", autor1, 1881, false);
+        Livro livro3=new Livro("1984", autor2, 1949, false);
+
+        livro1.exibirFicha();
+        livro2.exibirFicha();
+        livro3.exibirFicha();
+
+        livro1.emprestar();
+        livro1.emprestar();
+        livro1.devolver();
+        livro1.devolver();
+    }
+}
