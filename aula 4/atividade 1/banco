@@ -1,0 +1,117 @@
+package aula04.atividade01;
+
+import java.util.ArrayList;
+
+public class Banco {
+
+    private ArrayList<ContaBancaria> contas;
+    private int proximoNumero;
+
+    public Banco() {
+        contas = new ArrayList<>();
+        proximoNumero = 1;
+    }
+
+    public int abrirConta(String nome, String cpf, String dataNascimento) {
+
+        ContaBancaria novaConta = new ContaBancaria(
+                proximoNumero,
+                nome,
+                cpf,
+                dataNascimento,
+                0
+        );
+
+        contas.add(novaConta);
+
+        int numeroCriado = proximoNumero;
+
+        proximoNumero++;
+
+        return numeroCriado;
+    }
+
+    private ContaBancaria localizarConta(int numero) {
+
+        for (ContaBancaria conta : contas) {
+
+            if (conta.getNumero() == numero) {
+                return conta;
+            }
+        }
+
+        throw new IllegalArgumentException(
+                "Conta número " + numero + " não encontrada."
+        );
+    }
+
+    public void depositar(int numero, double valor) {
+
+        ContaBancaria conta = localizarConta(numero);
+
+        conta.depositar(valor);
+    }
+
+    public void sacar(int numero, double valor) {
+
+        ContaBancaria conta = localizarConta(numero);
+
+        conta.sacar(valor);
+    }
+
+    public void transferir(int origem, int destino, double valor) {
+
+        if (origem == destino) {
+            throw new IllegalArgumentException(
+                    "Não é possível transferir para a mesma conta."
+            );
+        }
+
+        if (valor <= 0) {
+            throw new IllegalArgumentException(
+                    "O valor da transferência deve ser maior que zero."
+            );
+        }
+
+        ContaBancaria contaOrigem = localizarConta(origem);
+        ContaBancaria contaDestino = localizarConta(destino);
+
+        contaOrigem.sacar(valor);
+        contaDestino.depositar(valor);
+    }
+
+    public double consultarSaldo(int numero) {
+
+        ContaBancaria conta = localizarConta(numero);
+
+        return conta.getSaldo();
+    }
+
+    public void exibirExtrato(int numero) {
+
+        ContaBancaria conta = localizarConta(numero);
+
+        conta.exibirExtrato();
+    }
+
+    public void aplicarRendimento(int numero, double percentual) {
+
+        ContaBancaria conta = localizarConta(numero);
+
+        conta.aplicarRendimento(percentual);
+    }
+
+    public void listarContas() {
+
+        System.out.println("\n--- CONTAS DO BANCO ---");
+
+        if (contas.isEmpty()) {
+            System.out.println("Nenhuma conta cadastrada.");
+            return;
+        }
+
+        for (ContaBancaria conta : contas) {
+            System.out.println(conta);
+        }
+    }
+}
