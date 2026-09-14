@@ -1,0 +1,266 @@
+############# principal 
+
+package aula04.atividade01;
+
+import java.util.Scanner;
+
+public class Principal {
+
+    public static void main(String[] args) {
+
+        Scanner teclado = new Scanner(System.in);
+
+        Banco banco = new Banco();
+
+        int opcao;
+
+        do {
+
+            mostrarMenu();
+
+            System.out.print("Escolha uma opção: ");
+
+            try {
+
+                opcao = Integer.parseInt(teclado.nextLine());
+
+                switch (opcao) {
+
+                    case 1:
+                        criarConta(teclado, banco);
+                        break;
+
+                    case 2:
+                        sacar(teclado, banco);
+                        break;
+
+                    case 3:
+                        depositar(teclado, banco);
+                        break;
+
+                    case 4:
+                        transferir(teclado, banco);
+                        break;
+
+                    case 5:
+                        consultarSaldo(teclado, banco);
+                        break;
+
+                    case 6:
+                        verExtrato(teclado, banco);
+                        break;
+
+                    case 7:
+                        aplicarRendimento(teclado, banco);
+                        break;
+
+                    case 8:
+                        banco.listarContas();
+                        break;
+
+                    case 0:
+                        System.out.println("\nPrograma encerrado.");
+                        break;
+
+                    default:
+                        System.out.println("\nOpção inválida.");
+                }
+
+            } catch (NumberFormatException e) {
+
+                System.out.println(
+                        "\nDigite apenas números nas opções e valores."
+                );
+
+                opcao = -1;
+
+            } catch (IllegalArgumentException e) {
+
+                System.out.println("\nErro: " + e.getMessage());
+
+                opcao = -1;
+            }
+
+        } while (opcao != 0);
+
+        teclado.close();
+    }
+
+    public static void mostrarMenu() {
+
+        System.out.println("\n==========================");
+        System.out.println("        BANCO 3.0");
+        System.out.println("==========================");
+        System.out.println("1 - Criar conta");
+        System.out.println("2 - Sacar");
+        System.out.println("3 - Depositar");
+        System.out.println("4 - Transferir");
+        System.out.println("5 - Consultar saldo");
+        System.out.println("6 - Ver extrato");
+        System.out.println("7 - Aplicar rendimento");
+        System.out.println("8 - Listar contas");
+        System.out.println("0 - Sair");
+        System.out.println("==========================");
+    }
+
+    public static void criarConta(
+            Scanner teclado,
+            Banco banco) {
+
+        System.out.println("\n--- CRIAR CONTA ---");
+
+        System.out.print("Nome do titular: ");
+        String nome = teclado.nextLine();
+
+        System.out.print("CPF: ");
+        String cpf = teclado.nextLine();
+
+        System.out.print("Data de nascimento: ");
+        String nascimento = teclado.nextLine();
+
+        int numero = banco.abrirConta(
+                nome,
+                cpf,
+                nascimento
+        );
+
+        System.out.println(
+                "Conta criada com sucesso!"
+        );
+
+        System.out.println(
+                "Número da conta: " + numero
+        );
+    }
+
+    public static void sacar(
+            Scanner teclado,
+            Banco banco) {
+
+        System.out.println("\n--- SACAR ---");
+
+        System.out.print("Número da conta: ");
+        int numero = Integer.parseInt(teclado.nextLine());
+
+        System.out.print("Valor do saque: R$ ");
+        double valor = Double.parseDouble(
+                teclado.nextLine().replace(",", ".")
+        );
+
+        banco.sacar(numero, valor);
+
+        System.out.println("Saque realizado com sucesso.");
+    }
+
+    public static void depositar(
+            Scanner teclado,
+            Banco banco) {
+
+        System.out.println("\n--- DEPOSITAR ---");
+
+        System.out.print("Número da conta: ");
+        int numero = Integer.parseInt(teclado.nextLine());
+
+        System.out.print("Valor do depósito: R$ ");
+        double valor = Double.parseDouble(
+                teclado.nextLine().replace(",", ".")
+        );
+
+        banco.depositar(numero, valor);
+
+        System.out.println(
+                "Depósito realizado com sucesso."
+        );
+    }
+
+    public static void transferir(
+            Scanner teclado,
+            Banco banco) {
+
+        System.out.println("\n--- TRANSFERÊNCIA ---");
+
+        System.out.print("Conta de origem: ");
+        int origem = Integer.parseInt(teclado.nextLine());
+
+        System.out.print("Conta de destino: ");
+        int destino = Integer.parseInt(teclado.nextLine());
+
+        System.out.print("Valor: R$ ");
+        double valor = Double.parseDouble(
+                teclado.nextLine().replace(",", ".")
+        );
+
+        banco.transferir(
+                origem,
+                destino,
+                valor
+        );
+
+        System.out.println(
+                "Transferência realizada com sucesso."
+        );
+    }
+
+    public static void consultarSaldo(
+            Scanner teclado,
+            Banco banco) {
+
+        System.out.println("\n--- CONSULTAR SALDO ---");
+
+        System.out.print("Número da conta: ");
+
+        int numero = Integer.parseInt(
+                teclado.nextLine()
+        );
+
+        double saldo = banco.consultarSaldo(numero);
+
+        System.out.printf(
+                "Saldo: R$ %.2f%n",
+                saldo
+        );
+    }
+
+    public static void verExtrato(
+            Scanner teclado,
+            Banco banco) {
+
+        System.out.println("\n--- EXTRATO ---");
+
+        System.out.print("Número da conta: ");
+
+        int numero = Integer.parseInt(
+                teclado.nextLine()
+        );
+
+        banco.exibirExtrato(numero);
+    }
+
+    public static void aplicarRendimento(
+            Scanner teclado,
+            Banco banco) {
+
+        System.out.println("\n--- RENDIMENTO ---");
+
+        System.out.print("Número da conta: ");
+
+        int numero = Integer.parseInt(
+                teclado.nextLine()
+        );
+
+        System.out.print("Percentual de rendimento: ");
+
+        double percentual = Double.parseDouble(
+                teclado.nextLine().replace(",", ".")
+        );
+
+        banco.aplicarRendimento(
+                numero,
+                percentual
+        );
+
+        System.out.println(
+                "Rendimento aplicado com sucesso."
+        );
+    }
+}
