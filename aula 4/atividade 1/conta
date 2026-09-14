@@ -1,0 +1,177 @@
+package aula04.atividade01;
+import java.util.ArrayList;
+
+public class ContaBancaria {
+
+    private int numero;
+    private String titular;
+    private String cpf;
+    private String dataNascimento;
+    private double saldo;
+    private ArrayList<Double> movimentacoes;
+
+    private static final double TARIFA_SAQUE = 1.00;
+
+    public ContaBancaria(int numero, String titular, String cpf,
+                         String dataNascimento, double saldoInicial) {
+
+        this.numero = numero;
+        setTitular(titular);
+        this.cpf = cpf;
+        this.dataNascimento = dataNascimento;
+        this.movimentacoes = new ArrayList<>();
+
+        if (saldoInicial < 0) {
+            this.saldo = 0;
+        } else {
+            this.saldo = saldoInicial;
+
+            if (saldoInicial > 0) {
+                movimentacoes.add(saldoInicial);
+            }
+        }
+    }
+
+    public int getNumero() {
+        return numero;
+    }
+
+    public String getTitular() {
+        return titular;
+    }
+
+    public double getSaldo() {
+        return saldo;
+    }
+
+    public int getOperacoes() {
+        return movimentacoes.size();
+    }
+
+    public void setTitular(String novo) {
+
+        if (novo == null || novo.trim().isEmpty()) {
+            throw new IllegalArgumentException("O titular não pode ficar vazio.");
+        }
+
+        titular = novo;
+    }
+
+    public void depositar(double valor) {
+
+        if (valor <= 0) {
+            throw new IllegalArgumentException(
+                    "O valor do depósito deve ser maior que zero."
+            );
+        }
+
+        saldo += valor;
+        movimentacoes.add(valor);
+    }
+
+    public void sacar(double valor) {
+
+        if (valor <= 0) {
+            throw new IllegalArgumentException(
+                    "O valor do saque deve ser maior que zero."
+            );
+        }
+
+        double total = valor + TARIFA_SAQUE;
+
+        if (total > saldo) {
+            throw new IllegalArgumentException("Saldo insuficiente.");
+        }
+
+        saldo -= total;
+
+        movimentacoes.add(-valor);
+
+        if (TARIFA_SAQUE > 0) {
+            movimentacoes.add(-TARIFA_SAQUE);
+        }
+    }
+
+    public void aplicarRendimento(double percentual) {
+
+        if (percentual <= 0) {
+            throw new IllegalArgumentException(
+                    "O percentual deve ser maior que zero."
+            );
+        }
+
+        double rendimento = saldo * percentual / 100.0;
+
+        saldo += rendimento;
+
+        if (rendimento > 0) {
+            movimentacoes.add(rendimento);
+        }
+    }
+
+    public void exibirExtrato() {
+
+        System.out.println("\n--- EXTRATO DA CONTA " + numero + " ---");
+
+        if (movimentacoes.isEmpty()) {
+            System.out.println("Nenhuma movimentação.");
+        } else {
+
+            for (double movimento : movimentacoes) {
+
+                if (movimento >= 0) {
+                    System.out.printf("Entrada: + R$ %.2f%n", movimento);
+                } else {
+                    System.out.printf("Saída:   - R$ %.2f%n",
+                            Math.abs(movimento));
+                }
+            }
+        }
+
+        System.out.printf("Saldo atual: R$ %.2f%n", saldo);
+        System.out.println("Operações: " + getOperacoes());
+    }
+
+    public double totalDepositado() {
+
+        double total = 0;
+
+        for (double movimento : movimentacoes) {
+
+            if (movimento > 0) {
+                total += movimento;
+            }
+        }
+
+        return total;
+    }
+
+    public double maiorSaque() {
+
+        double maior = 0;
+
+        for (double movimento : movimentacoes) {
+
+            if (movimento < 0) {
+
+                double valor = Math.abs(movimento);
+
+                if (valor > maior) {
+                    maior = valor;
+                }
+            }
+        }
+
+        return maior;
+    }
+
+    @Override
+    public String toString() {
+
+        return "Conta " + numero
+                + " | Titular: " + titular
+                + " | CPF: " + cpf
+                + " | Nascimento: " + dataNascimento
+                + String.format(" | Saldo: R$ %.2f", saldo);
+    }
+}
